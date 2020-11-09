@@ -17,6 +17,9 @@ let currentMoves = new Array(4);
 let thebody;
 thebody = document.getElementById('bigboy');
 
+let moveIsMade = false;
+let enemyMove = false;
+
 function createCanvas() {
 
     game = document.createElement('canvas');
@@ -106,6 +109,20 @@ function createCanvas() {
     hphud2.x = 580;
     container.addChild(hphud2);
 
+    
+
+    app.ticker.add(() => {
+        state = changeState(moveIsMade, enemyMove);
+
+        switch(state){
+            case states.s1:
+
+            case states.s2:
+
+            case states.s3:
+        }
+        
+    });
 
 
     container.addChild(text);
@@ -117,8 +134,10 @@ function createCanvas() {
 function createButtons(myMons, opponentMons, nameText, hpText){
     let myHud = document.createElement('div');
     myHud.className = 'hud';
+    myHud.id = 'myHud';
     let switchHud = document.createElement('div');
     switchHud.className = 'hud';
+    switchHud.id = 'switchHud';
     thebody.append(myHud);
     thebody.append(switchHud);
 
@@ -135,6 +154,7 @@ function createButtons(myMons, opponentMons, nameText, hpText){
             console.log(opponentMons[enemyCurrent].hp);
             thismove.doAttack(myMons[myCurrent], opponentMons[enemyCurrent]);
             console.log(opponentMons[enemyCurrent].hp);
+            moveIsMade = true;
         });
         myHud.append(moveButtons[i]);
     }
@@ -145,7 +165,7 @@ function createButtons(myMons, opponentMons, nameText, hpText){
         let thisMon = myMons[i];
         switchButtons[i].innerText = thisMon.name;
         switchButtons[i].addEventListener('click', () => {
-            if(state == 'choose a move'){
+            if(state == 'choose a move' && !thisMon.checkFaint()){
                 console.log('switch to ' + thisMon.name);
                 container.removeChild(myMons[myCurrent].sprite);
                 container.addChild(myMons[i].sprite);
@@ -153,7 +173,11 @@ function createButtons(myMons, opponentMons, nameText, hpText){
                     moveButtons[j].innerText = myMons[i].moves[j].name;
                 }
                 myCurrent = i;
-            } else {
+                moveIsMade = true;
+            } else if(thisMon.checkFaint()){
+                alert('This monster has fainted');
+            }
+            else {
                 console.log('illegal');
             }
         });
