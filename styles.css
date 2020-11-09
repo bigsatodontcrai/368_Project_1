@@ -80,8 +80,8 @@
 
     .menu{
         background-color: white;
-        height: 60vmin;
-        width: 30vmin;
+        height: 50vmin;
+        width: 40vmin;
         color: black;
         display: grid;
         grid-template-columns: 1fr;
@@ -90,7 +90,7 @@
 
     .set{
         background-color: white;
-        width: 30vmin;
+        width: 40vmin;
         height: 10vmin;
         display: grid;
         justify-items: center;

@@ -60,7 +60,7 @@ function moveGang(name, type, style, attackPower, accuracy) {
         }
         if (this.style = 'Attack' && Math.random() <= this.accuracy) {
             if (damage == 0) {
-                //alert('That type is immune!');
+                alert('That type is immune!');
             }
             if (eff == 2) {
                 //alert('That type is very weak to this move!');

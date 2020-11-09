@@ -175,6 +175,17 @@ function createCanvas() {
                 enemyText.text = opponentMons[enemyCurrent].name + ' ' + opponentMons[enemyCurrent].level;
                 moveIsMade = false;
                 enemyMove = false;
+
+                let init = false;
+
+                myMons.forEach(pkmn => {
+                    init = init && pkmn.checkFaint();
+                });
+
+                if(init){
+                    alert('Game over');
+                }
+
         }
         
     });
@@ -245,6 +256,7 @@ function createButtons(myMons, opponentMons, nameText, hpText){
                 faintException = false;
             } else if(thisMon.checkFaint()){
                 alert('This monster has fainted');
+                switchButtons[i].backGroundColor = '#FF0000';
             }
             else {
                 alert('Not your turn!');
