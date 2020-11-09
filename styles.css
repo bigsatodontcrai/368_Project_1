@@ -1,0 +1,102 @@
+    body {
+        background-color: black;
+        display: grid;
+        grid-template-columns: 1fr;
+        
+        justify-items: center;
+        color: white;
+    }
+    #container {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    #game {
+        margin: auto;
+        
+        overflow: hidden;
+    }
+
+    .hud {
+        
+        background-color: rgb(78, 161, 199);
+        height: 10vmin;
+        width: 100vmin;
+        margin: 2vmin;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr;
+        justify-content: center;
+        justify-items: center;
+        color: white;
+
+    }
+
+    .move {
+        margin: 5vmin;
+        font-size: 0.1vmin sans-serif;
+        background-color: white;
+        height: 4vmin;
+        width: 17vmin;
+        padding: .3em 1em;
+        outline: none;
+        border: none;
+        text-decoration: none;
+        cursor: pointer;
+        border-radius: .2em;
+        color: #333;
+    }
+
+    #myname {
+        background-color: rgb(78, 161, 199);
+        height: 5vmin;
+        width: 100vmin;
+        margin: 2vmin;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr;
+        justify-content: center;
+        justify-items: center;
+        color: white;
+    }
+
+    #Member4 {
+        margin: 5vmin;
+        font-size: 0.3vmin sans-serif;
+        background-color: red;
+        height: 3vmin;
+        width: 15vmin;
+        padding: .3em 1em;
+        outline: none;
+        border: none;
+        text-decoration: none;
+        cursor: pointer;
+        border-radius: .2em;
+        color: #333;
+    }
+
+    .menu{
+        background-color: white;
+        height: 60vmin;
+        width: 30vmin;
+        color: black;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
+    }
+
+    .set{
+        background-color: white;
+        width: 30vmin;
+        height: 10vmin;
+        display: grid;
+        justify-items: center;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: 1fr;
+
+    }
+
+    
