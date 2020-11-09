@@ -53,28 +53,22 @@ function moveGang(name, type, style, attackPower, accuracy) {
                     throw 'Not a move';
 
             }
-            return true;
+            return 0;
         } else if (this.name == enemy.immunity) {
-            console.log('unaffected...');
-            return false;
+            //alert('unaffected...');
+            return 0;
         }
         if (this.style = 'Attack' && Math.random() <= this.accuracy) {
-            enemy.hp -= damage;
-            if (enemy.checkFaint()) {
-                enemy.hp = 0;
-                console.log(enemy.name + ' has fainted!');
-                //faint();
-            }
             if (damage == 0) {
-                console.log('That type is immune!');
+                //alert('That type is immune!');
             }
             if (eff == 2) {
-                console.log('That type is very weak to this move!');
+                //alert('That type is very weak to this move!');
             }
-            return true;
+            return Math.floor(damage);
         }
-        console.log('The attack missed!');
-        return false;
+        alert('The attack missed!');
+        return 0;
 
     }
 }

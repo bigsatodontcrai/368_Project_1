@@ -2,13 +2,20 @@ let game;
 let app;
 let state = 'choose a move';
 
+let yourMove;
+let turnMove;
+
 let sprites = new Array(18);
 let background;
 let huddy;
 let hphud1;
 let hphud2;
-
+let enemyCurrent;
+let myCurrent;
 let container;
+let faintException = false;
+let opponentDamage = 0;
+let myDamage = 0;
 
 let platform1;
 let platform2;
@@ -89,37 +96,85 @@ function createCanvas() {
     container.addChild(myMons[0].sprite);
     container.addChild(opponentMons[0].sprite);
 
-    let text = new PIXI.Text(myMons[0].name, { fontFamily: 'Helvetica', fontSize: 18, fill: 0xF00000, align: 'center' });
+    let text = new PIXI.Text(myMons[0].name + ' ' + myMons[0].level, { fontFamily: 'Helvetica', fontSize: 18, fill: 0xF00000, align: 'center' });
+    let enemyText = new PIXI.Text(opponentMons[0].name + ' ' + opponentMons[0].level, { fontFamily: 'Helvetica', fontSize: 18, fill: 0xF00000, align: 'center' });
     text.x = 10;
     text.y = 20;
+    enemyText.y = 20;
+    enemyText.x = 600;
     hphud1 = PIXI.Sprite.from('./Assets/HUD.png');
     let hp1 = new PIXI.Text('HP: ' + myMons[0].stats[0], { fontFamily: 'Helvetica', fontSize: 18, fill: 0xF00000, align: 'center' });
+    let hp2 = new PIXI.Text('HP: ' + opponentMons[0].stats[0] , { fontFamily: 'Helvetica', fontSize: 18, fill: 0xF00000, align: 'center' });
     hp1.y = 20;
-    hp1.x = 150;
+    hp1.x = 180;
+    hp2.y = 20;
+    hp2.x = 770;
     hphud1.y = 10;
     hphud1.scale.y = 0.8;
     container.addChild(hphud1);
     container.addChild(text);
     container.addChild(hp1);
+    
 
 
     hphud2 = PIXI.Sprite.from('./Assets/HUD.png');
     hphud2.y = 10;
     hphud2.scale.y = 0.8;
-    hphud2.x = 580;
+    hphud2.x = 590;
     container.addChild(hphud2);
+    container.addChild(hp2);
+    container.addChild(enemyText);
 
+    hudtext = new PIXI.Text(state, { fontFamily: 'sans-serif', fontSize: 20, fill: 0xFFFFFF, align: 'center' });
+    hudtext.y = 320;
+    hudtext.x = 30;
+    container.addChild(hudtext);
+
+    let timer = 0;
     
 
     app.ticker.add(() => {
+        
+        console.log('i have made a move: ' + moveIsMade);
+        console.log('opponent has made a move ' + enemyMove);
         state = changeState(moveIsMade, enemyMove);
-
+        hudtext.text = state;
         switch(state){
             case states.s1:
-
+                break;
             case states.s2:
-
+                timer++
+                if(timer >= 150){
+                    let thing = enemyMakesMove(opponentMons[enemyCurrent], myMons[myCurrent]);
+                    yourMove = thing.name;
+                    myDamage = thing.damage;
+                    timer = 0;
+                    enemyMove = true;
+                }
+                break;
             case states.s3:
+                break;
+            case states.s4:
+                timer++
+                if(timer >= 100){
+                    moveIsMade = false;
+                }
+                break;
+            case states.s5:
+                if (myMons[myCurrent].status == 'Curse') {//will be moved into a checkstatus function
+                    if (myMons[mycurrent].hp > 30) {
+                        myMons[mycurrent].hp -= 30;
+                    } else {
+                        myMons[mycurrent].hp = 0;
+                    }
+                }
+                calculateHP(myMons, opponentMons, hudtext);
+                
+                hp1.text = 'HP: ' + myMons[myCurrent].hp;
+                hp2.text = 'HP: ' + opponentMons[enemyCurrent].hp;
+                enemyText.text = opponentMons[enemyCurrent].name + ' ' + opponentMons[enemyCurrent].level;
+                moveIsMade = false;
+                enemyMove = false;
         }
         
     });
@@ -141,20 +196,26 @@ function createButtons(myMons, opponentMons, nameText, hpText){
     thebody.append(myHud);
     thebody.append(switchHud);
 
-    let myCurrent = 0;
-    let enemyCurrent = 0;
+    myCurrent = 0;
+    enemyCurrent = 0;
     let moveButtons = new Array(4);
     let switchButtons = new Array(3);
     for(let i = 0; i < 4; i++){
+        
         moveButtons[i] = document.createElement('button');
         moveButtons[i].className = 'move';
         let thismove = myMons[0].moves[i];
         moveButtons[i].innerText = thismove.name;
         moveButtons[i].addEventListener('click', () => {
-            console.log(opponentMons[enemyCurrent].hp);
-            thismove.doAttack(myMons[myCurrent], opponentMons[enemyCurrent]);
-            console.log(opponentMons[enemyCurrent].hp);
-            moveIsMade = true;
+            if(state == 'choose a move'){
+                console.log(opponentMons[enemyCurrent].hp);
+                opponentDamage = thismove.doAttack(myMons[myCurrent], opponentMons[enemyCurrent]);
+                console.log(opponentMons[enemyCurrent].hp);
+                moveIsMade = true;
+                turnMove = thismove.name;
+            } else {
+                alert('Not your turn!');
+            }   
         });
         myHud.append(moveButtons[i]);
     }
@@ -165,19 +226,28 @@ function createButtons(myMons, opponentMons, nameText, hpText){
         let thisMon = myMons[i];
         switchButtons[i].innerText = thisMon.name;
         switchButtons[i].addEventListener('click', () => {
-            if(state == 'choose a move' && !thisMon.checkFaint()){
+            if((state == 'choose a move' || faintException)&& !thisMon.checkFaint() && i != myCurrent){
                 console.log('switch to ' + thisMon.name);
                 container.removeChild(myMons[myCurrent].sprite);
                 container.addChild(myMons[i].sprite);
                 for(let j = 0; j < 4; j++){
                     moveButtons[j].innerText = myMons[i].moves[j].name;
                 }
+                turnMove = 'You switched to: ' + thisMon.name;
+                nameText.text = thisMon.name + ' ' + thisMon.level;
+                hpText.text = 'HP ' + thisMon.hp;
                 myCurrent = i;
-                moveIsMade = true;
+                if(faintException == false) {
+                    moveIsMade = true;
+                } else {
+                    moveIsMade = false;
+                }
+                faintException = false;
             } else if(thisMon.checkFaint()){
                 alert('This monster has fainted');
             }
             else {
+                alert('Not your turn!');
                 console.log('illegal');
             }
         });
