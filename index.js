@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    alert('Choose your team');
     createDivs(bigArray);
 
 

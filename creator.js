@@ -16,6 +16,8 @@ let container;
 let faintException = false;
 let opponentDamage = 0;
 let myDamage = 0;
+let turnTimer = 0;
+let turnOppTimer = 0;
 
 let platform1;
 let platform2;
@@ -103,8 +105,8 @@ function createCanvas() {
     enemyText.y = 20;
     enemyText.x = 600;
     hphud1 = PIXI.Sprite.from('./Assets/HUD.png');
-    let hp1 = new PIXI.Text('HP: ' + myMons[0].stats[0], { fontFamily: 'Helvetica', fontSize: 18, fill: 0xF00000, align: 'center' });
-    let hp2 = new PIXI.Text('HP: ' + opponentMons[0].stats[0] , { fontFamily: 'Helvetica', fontSize: 18, fill: 0xF00000, align: 'center' });
+    let hp1 = new PIXI.Text('HP: ' + myMons[0].stats[0] + '/' + myMons[0].stats[0], { fontFamily: 'Helvetica', fontSize: 18, fill: 0xF00000, align: 'center' });
+    let hp2 = new PIXI.Text('HP: ' + opponentMons[0].stats[0] + '/' + opponentMons[0].stats[0], { fontFamily: 'Helvetica', fontSize: 18, fill: 0xF00000, align: 'center' });
     hp1.y = 20;
     hp1.x = 180;
     hp2.y = 20;
@@ -134,9 +136,6 @@ function createCanvas() {
     
 
     app.ticker.add(() => {
-        
-        console.log('i have made a move: ' + moveIsMade);
-        console.log('opponent has made a move ' + enemyMove);
         state = changeState(moveIsMade, enemyMove);
         hudtext.text = state;
         switch(state){
@@ -161,20 +160,33 @@ function createCanvas() {
                 }
                 break;
             case states.s5:
-                if (myMons[myCurrent].status == 'Curse') {//will be moved into a checkstatus function
-                    if (myMons[mycurrent].hp > 30) {
-                        myMons[mycurrent].hp -= 30;
-                    } else {
-                        myMons[mycurrent].hp = 0;
-                    }
-                }
-                calculateHP(myMons, opponentMons, hudtext);
                 
-                hp1.text = 'HP: ' + myMons[myCurrent].hp;
-                hp2.text = 'HP: ' + opponentMons[enemyCurrent].hp;
+                calculateHP(myMons, opponentMons, hudtext);
+                if(!myMons[myCurrent].checkFaint()){
+                    useStatus(myMons, myCurrent, 'player');
+                }
+                if(!opponentMons[enemyCurrent].checkFaint()){
+                    useStatus(opponentMons, enemyCurrent, 'enemy');
+                }
+                
+                hp1.text = 'HP: ' + myMons[myCurrent].hp + '/' + myMons[myCurrent].stats[0];
+                hp2.text = 'HP: ' + opponentMons[enemyCurrent].hp + '/' + opponentMons[enemyCurrent].stats[0];
                 enemyText.text = opponentMons[enemyCurrent].name + ' ' + opponentMons[enemyCurrent].level;
                 moveIsMade = false;
+                if(myMons[myCurrent].status == 'intimidated' && turnTimer < 2){
+                    turnTimer++;
+                } if(turnTimer == 2){
+                    turnTimer = 0;
+                    myMons[myCurrent].status = 'none';
+                }
                 enemyMove = false;
+                if (opponentMons[enemyCurrent].status == 'intimidated' && turnOppTimer < 2) {
+                    turnOppTimer++;
+                } if (turnOppTimer == 2) {
+                    turnOppTimer = 0;
+                    opponentMons[enemyCurrent].status = 'none';
+                }
+                
 
                 opponentDamage = 0;
                 myDamage = 0;
@@ -213,19 +225,23 @@ function createButtons(myMons, opponentMons, nameText, hpText){
     enemyCurrent = 0;
     let moveButtons = new Array(4);
     let switchButtons = new Array(3);
+    let thisMove = new Array(4);
     for(let i = 0; i < 4; i++){
         
         moveButtons[i] = document.createElement('button');
         moveButtons[i].className = 'move';
-        let thismove = myMons[0].moves[i];
-        moveButtons[i].innerText = thismove.name;
+        thisMove[i] = myMons[0].moves[i];
+        moveButtons[i].innerText = thisMove[i].name;
         moveButtons[i].addEventListener('click', () => {
             if(state == 'choose a move'){
                 console.log(opponentMons[enemyCurrent].hp);
-                opponentDamage = thismove.doAttack(myMons[myCurrent], opponentMons[enemyCurrent]);
+                opponentDamage = thisMove[i].doAttack(myMons[myCurrent], opponentMons[enemyCurrent]);
                 console.log(opponentMons[enemyCurrent].hp);
                 moveIsMade = true;
-                turnMove = thismove.name;
+                turnMove = thisMove[i].name;
+                if(opponentDamage == -1){
+                    turnMove = 'Intimidated! NO attack';
+                }
             } else {
                 alert('Not your turn!');
             }   
@@ -241,14 +257,16 @@ function createButtons(myMons, opponentMons, nameText, hpText){
         switchButtons[i].addEventListener('click', () => {
             if((state == 'choose a move' || faintException)&& !thisMon.checkFaint() && i != myCurrent){
                 console.log('switch to ' + thisMon.name);
+                myMons[myCurrent].status = 'none';
                 container.removeChild(myMons[myCurrent].sprite);
                 container.addChild(myMons[i].sprite);
                 for(let j = 0; j < 4; j++){
+                    thisMove[j] = myMons[i].moves[j];
                     moveButtons[j].innerText = myMons[i].moves[j].name;
                 }
                 turnMove = 'You switched to: ' + thisMon.name;
                 nameText.text = thisMon.name + ' ' + thisMon.level;
-                hpText.text = 'HP ' + thisMon.hp;
+                hpText.text = 'HP: ' + thisMon.hp + '/' + thisMon.stats[0];
                 myCurrent = i;
                 if(faintException == false) {
                     moveIsMade = true;
@@ -258,7 +276,6 @@ function createButtons(myMons, opponentMons, nameText, hpText){
                 faintException = false;
             } else if(thisMon.checkFaint()){
                 alert('This monster has fainted');
-                switchButtons[i].backGroundColor = '#FF0000';
             }
             else {
                 alert('Not your turn!');
@@ -303,6 +320,11 @@ function createDivs(arrayOfSprites) {
             }
             userMenu.removeChild(piece);
             let next = userMenu.firstChild;
+            let pop = getRandomInt(4);
+            for(let i = 0; i < pop; i++){
+                userMenu.removeChild(userMenu.firstChild);
+            }
+            next = userMenu.firstChild;
             while (next.firstChild != null) {
                 enemyTeam.push(next.firstChild.className);
                 next.removeChild(next.firstChild);

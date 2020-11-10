@@ -16,11 +16,18 @@ function moveGang(name, type, style, attackPower, accuracy) {
         let myType = typeMap.get(type1);
         let yourType = typeMap.get(type2);
         let eff = typeChartGraph[myType][yourType];
+        console.log(type1 + ' ' + type2 + ' ' + myType + ' ' + yourType);
+        console.log(eff);
         let damage = damageCalculation(player.off, enemy.def, this.attackPower, eff);
-        if (this.style == 'Skill' && this.name != enemy.immunity) {
+        console.log(damage);
+        if (this.style == 'Skill') {
             switch (this.name) {
                 case 'Blind':
-                    enemy.status == 'blinded';
+                    if (enemy.status == 'none' && Math.random() <= this.accuracy && player.spd >= enemy.spd) {
+                        enemy.status = 'blinded';
+                    } else {
+                        alert('failed status');
+                    }
                     break;
                 case 'Strength':
                     if (player.off != 1.2 * 1.2 * 1.2 * 1.2 * 1.2 * 1.2 * player.off) {
@@ -30,21 +37,29 @@ function moveGang(name, type, style, attackPower, accuracy) {
                     }
                     break;
                 case 'Curse':
-                    enemy.status == 'cursed';
+                    if (enemy.status == 'none' && Math.random() <= this.accuracy && player.spd >= enemy.spd) {
+                        enemy.status = 'cursed';
+                    } else {
+                        alert('failed status');
+                    }
                     break;
                 case 'Heal':
-                    if (player.health + 50 < player.stats[0]) {
-                        player.health = player.stats[0];
+                    if (player.hp + 50 >= player.stats[0]) {
+                        player.hp = player.stats[0];
                     } else {
-                        player.health += 50;
+                        player.hp += 50;
                     }
                     break;
                 case 'Intimidate':
-                    enemy.status == 'intimidated';
+                    if (enemy.status == 'none' && Math.random() <= this.accuracy && player.spd >= enemy.spd) {
+                        enemy.status = 'intimidated';
+                    } else {
+                        alert('failed status');
+                    }
                     break;
                 case 'Chase':
                     if (player.spd != 1.2 * 1.2 * 1.2 * 1.2 * 1.2 * 1.2 * player.spd) {
-                        player.speed *= 1.2;
+                        player.spd *= 1.2;
                     } else {
                         console.log('highest speed');
                     }
@@ -60,7 +75,7 @@ function moveGang(name, type, style, attackPower, accuracy) {
         }
         if (this.style = 'Attack' && Math.random() <= this.accuracy) {
             if (damage == 0) {
-                alert('That type is immune!');
+                //alert('That type is immune!');
             }
             if (eff == 2) {
                 //alert('That type is very weak to this move!');
@@ -125,6 +140,7 @@ function monster(name, type, classType, sprite) {
 
     this.checkFaint = function () {
         if (this.hp <= 0) {
+            this.hp = 0;
             return true;
         } else {
             return false;
