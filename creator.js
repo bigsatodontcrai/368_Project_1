@@ -176,6 +176,8 @@ function createCanvas() {
                 moveIsMade = false;
                 enemyMove = false;
 
+                opponentDamage = 0;
+                myDamage = 0;
                 let init = false;
 
                 myMons.forEach(pkmn => {
