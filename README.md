@@ -1,4 +1,4 @@
-# 368_Project_1
+# EECS 368 Project
 Pokemon inspired turn-based combat as the game project for EECS 368.
 
 First you select your team based on the 6 rows which have been shuffled to contain one character class each.
