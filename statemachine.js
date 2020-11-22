@@ -148,3 +148,4 @@ function calculateHP(myMons, opponentMons, hud){
         } 
     }
 }
+
