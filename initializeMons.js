@@ -4,58 +4,58 @@ let theDex = new Array(18);
 
 let monsterArray = [];
 
-let fireKnight = new monster('Flame Warrior', 'fire', warrior, './Assets/Sprite0.png');
+let fireKnight = new monster('Flame Warrior', 'fire', warrior, './Assets/sprite0.png');
 monsterArray.push(fireKnight);
 
-let fireMage = new monster('Swirling Illusionist', 'fire', magic, './Assets/Sprite1.png');
+let fireMage = new monster('Swirling Illusionist', 'fire', magic, './Assets/sprite1.png');
 monsterArray.push(fireMage);
 
-let fireBunny = new monster('Magma Rabbit', 'fire', beast, './Assets/Sprite2.png');
+let fireBunny = new monster('Magma Rabbit', 'fire', beast, './Assets/sprite2.png');
 monsterArray.push(fireBunny);
 
-let kingOfSea = new monster('King of the Sea', 'water', warrior, './Assets/Sprite3.png');
+let kingOfSea = new monster('King of the Sea', 'water', warrior, './Assets/sprite3.png');
 monsterArray.push(kingOfSea);
 
-let iceWizard = new monster('Ice Wizard', 'water', magic, './Assets/Sprite4.png');
+let iceWizard = new monster('Ice Wizard', 'water', magic, './Assets/sprite4.png');
 monsterArray.push(iceWizard);
 
-let oceanWhale = new monster('Ocean Whale', 'water', beast, './Assets/Sprite5.png');
+let oceanWhale = new monster('Ocean Whale', 'water', beast, './Assets/sprite5.png');
 monsterArray.push(oceanWhale);
 
-let grassKnight = new monster('Leaf the Samurai', 'grass', warrior, './Assets/Sprite6.png');
+let grassKnight = new monster('Leaf the Samurai', 'grass', warrior, './Assets/sprite6.png');
 monsterArray.push(grassKnight);
 
-let grassMage = new monster('Field Sage', 'grass', magic, './Assets/Sprite7.png');
+let grassMage = new monster('Field Sage', 'grass', magic, './Assets/sprite7.png');
 monsterArray.push(grassMage);
 
-let grassBeast = new monster('Forest Fang', 'grass', beast, './Assets/Sprite8.png');
+let grassBeast = new monster('Forest Fang', 'grass', beast, './Assets/sprite8.png');
 monsterArray.push(grassBeast);
 
-let sonicWarrior = new monster('Sonic Sword', 'sound', warrior, './Assets/Sprite9.png');
+let sonicWarrior = new monster('Sonic Sword', 'sound', warrior, './Assets/sprite9.png');
 monsterArray.push(sonicWarrior);
 
-let explodeMage = new monster('Mage Explode!', 'sound', magic, './Assets/Sprite10.png');
+let explodeMage = new monster('Mage Explode!', 'sound', magic, './Assets/sprite10.png');
 monsterArray.push(explodeMage);
 
-let fiendishBat = new monster('Fiendish Bat', 'sound', beast, './Assets/Sprite11.png');
+let fiendishBat = new monster('Fiendish Bat', 'sound', beast, './Assets/sprite11.png');
 monsterArray.push(fiendishBat);
 
-let gravityKnight = new monster('World Fighter', 'gravity', warrior, './Assets/Sprite12.png');
+let gravityKnight = new monster('World Fighter', 'gravity', warrior, './Assets/sprite12.png');
 monsterArray.push(gravityKnight);
 
-let gravityMage = new monster('Martian', 'gravity', magic, './Assets/Sprite13.png');
+let gravityMage = new monster('Martian', 'gravity', magic, './Assets/sprite13.png');
 monsterArray.push(gravityMage);
 
-let gravityBeast = new monster('Neptune', 'gravity', beast, './Assets/Sprite14.png');
+let gravityBeast = new monster('Neptune', 'gravity', beast, './Assets/sprite14.png');
 monsterArray.push(gravityBeast);
 
-let flyingWarrior = new monster('Ascended', 'flying', warrior, './Assets/Sprite15.png');
+let flyingWarrior = new monster('Ascended', 'flying', warrior, './Assets/sprite15.png');
 monsterArray.push(flyingWarrior);
 
-let flyingMage = new monster('Weather Infector', 'flying', magic, './Assets/Sprite16.png');
+let flyingMage = new monster('Weather Infector', 'flying', magic, './Assets/sprite16.png');
 monsterArray.push(flyingMage);
 
-let dragon = new monster('King Dragon', 'flying', beast, './Assets/Sprite17.png');
+let dragon = new monster('King Dragon', 'flying', beast, './Assets/sprite17.png');
 dragon.stats[3] += 35;
 monsterArray.push(dragon);
 
